@@ -46,11 +46,19 @@
             Liste des joueurs
           </a>
         </li>
-        <li class="nav-item">
+       @auth
+            <li class="nav-item">
+          <a class="btn btn-primary px-3" href="{{ route('logout') }}">
+            Se decoonecter
+          </a>
+        </li>
+        @else
+          <li class="nav-item">
           <a class="btn btn-primary px-3" href="{{ route('login') }}">
             Se connecter
           </a>
         </li>
+       @endauth
       </ul>
     </div>
   </div>

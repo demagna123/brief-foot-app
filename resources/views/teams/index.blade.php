@@ -1,52 +1,53 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2>Liste des équipes</h2>
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Parcourir toutes les équipes</h1>
+        <p class="text-muted">
+            Parcourez la liste de toutes les équipes du championnat de<br>
+            <strong>Le nom d’un championnat fictif</strong>
+        </p>
+    </div>
 
     @if ($teams->isEmpty())
-        <p>Aucune équipe enregistrée pour le moment.</p>
+        <p class="text-center">Aucune équipe enregistrée pour le moment.</p>
     @else
-        <table border="1" cellpadding="10">
-            <thead>
-                <tr>
-                    <th>Photo</th>
-                    <th>Nom</th>
-                    <th>Année de création</th>
-                    <th>Nombre de joueurs</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($teams as $team)
-                    <tr>
-                        <td>
-                            <div>
-                                @if ($team->photo)
-                                    <img src="{{ asset('storage/' . $team->photo) }}" alt="Photo de profil" style="width: 100px; height: 100px;">
-                                @else
-                                    <img src="{{ asset('images/default-avatar.png') }}" alt="Photo de profil par défaut">
-                                @endif
-                            </div>
-                        </td>
-                        <td>{{ $team->name }}</td>
-                        <td>{{ $team->year_creation }}</td>
-                        <td>{{ $team->players_count }}</td>
-                        <td>
-                            <a href="{{ route('teams.show', $team) }}">Voir détails</a>
-                            <form action="{{ route('teams.destroy', $team->id) }}" method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="row g-4">
+            {{-- Bouton créer en bas ou en haut --}}
+            @auth
+                <div class="text-center mt-5">
+                <a href="{{ route('teams.create') }}" class="btn btn-success">
+                    ➕ Ajouter une nouvelle équipe
+                </a>
+            </div>
+            @endauth
+            
+            @foreach ($teams as $team)
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="card h-100 text-center shadow-sm">
+                        {{-- Logo équipe --}}
+                        @if ($team->photo)
+                            <img src="{{ asset('storage/' . $team->photo) }}" alt="{{ $team->name }}"
+                                class="card-img-top p-4" style="max-height: 150px; object-fit: contain;">
+                        @else
+                            <img src="{{ asset('images/default-avatar.png') }}" alt="Photo par défaut"
+                                class="card-img-top p-4" style="max-height: 150px; object-fit: contain;">
+                        @endif
+
+                        {{-- Infos --}}
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">{{ $team->name }}</h5>
+                            <p class="mb-1">Année de création : {{ $team->year_creation }}</p>
+                            <p class="text-muted small">Nombre de joueurs : {{ $team->players_count }}</p>
+                            <a href="{{ route('teams.show', $team) }}" class="btn btn-primary btn-sm">
+                                Détails de l’équipe
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     @endif
 
-    <br>
-    <a href="{{ route('teams.create') }}">➕ Ajouter une nouvelle équipe</a>
+
 @endsection

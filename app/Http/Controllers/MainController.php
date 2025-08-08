@@ -10,6 +10,6 @@ class MainController extends Controller
     public function home(){
        $teams = Team::withCount('players')->get(); // pour compter les joueurs
 
-    return view('home', compact('teams'));
+    return view('teams.index', compact('teams'));
     }
 }

@@ -1,49 +1,71 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2>Liste des matchs</h2>
+<style>
+  .sticky-actions { position: sticky; top: 64px; z-index: 1020; }
+  .match-tile { border-radius: 14px; }
+  .team-logo { width: 36px; height: 36px; object-fit: contain; }
+</style>
 
-    @foreach ($matches as $match)
-        <div style="margin-bottom: 20px;">
-            <p>
-                <strong>
-                    <div>
-                        @if ($match->homeTeam()?->photo)
-                            <img src="{{ asset('storage/' . $match->homeTeam()->photo) }}" alt="Photo de profil"
-                                style="width: 100px; height: 100px; ">
-                        @else
-                            <img src="{{ asset('images/default-avatar.png') }}" alt="Photo de profil par défaut"
-                                style="">
-                        @endif
-                    </div>
-                    {{ $match->homeTeam()?->name ?? 'Équipe inconnue' }}
-                    {{ $match->homeScore() }}
-                    -
+<div class="container">
 
-                    {{ $match->awayScore() }}
-                    {{ $match->awayTeam()?->name ?? 'Équipe inconnue' }}
+  {{-- Titre + bouton créer --}}
+  <div class="d-flex justify-content-between align-items-center sticky-actions mb-4">
+    <div>
+      <h1 class="fw-bold mb-1">Parcourir tous les matchs prévus</h1>
+      <div class="text-muted">Parcourez la liste de tous les matchs prévus du championnat.</div>
+    </div>
+    @auth
+      <a href="{{ route('matches.create') }}" class="btn btn-primary">+ Créer un match</a>
+    @endauth
+  </div>
 
-                    <div>
-                        @if ($match->awayTeam()?->photo)
-                            <img src="{{ asset('storage/' . $match->awayTeam()->photo) }}" alt="Photo de profil"
-                                style="width: 100px; height: 100px; ">
-                        @else
-                            <img src="{{ asset('images/default-avatar.png') }}" alt="Photo de profil par défaut"
-                                style="">
-                        @endif
-                    </div>
-                </strong><br>
-                <small>{{ $match->date_matche }} | Statut : {{ $match->status }}</small><br>
+  @if ($matches->isEmpty())
+    <p class="text-muted">Aucun match pour le moment.</p>
+  @else
+    <div class="row g-3">
+      @foreach ($matches as $match)
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="bg-white border shadow-sm match-tile p-3">
+            <div class="d-flex align-items-center justify-content-between">
+              {{-- Équipe à domicile --}}
+              <div class="d-flex align-items-center gap-2">
+                @if ($match->homeTeam()?->photo)
+                  <img class="team-logo" src="{{ asset('storage/' . $match->homeTeam()->photo) }}" alt="{{ $match->homeTeam()?->name }}">
+                @else
+                  <img class="team-logo" src="{{ asset('images/default-avatar.png') }}" alt="Photo par défaut">
+                @endif
+                <span class="fw-semibold">{{ $match->homeTeam()?->name ?? 'Équipe inconnue' }}</span>
+              </div>
 
-                <!-- 👇 Lien vers les détails -->
-                <a href="{{ route('matches.show', $match->id) }}">Voir les détails du match</a>
-                <a href="{{ route('matches.edit', $match->id) }}">Modifier</a>
-                <form action="{{ route('matches.destroy', $match->id) }}" method="post">
-                @csrf
-                @method('DELETE')
-                <button type="submit">Supprimer</button>
-                </form>
-            </p>
+              {{-- Score --}}
+              <div class="fw-bold">
+                {{ $match->homeScore() }} <span class="text-danger">-</span> {{ $match->awayScore() }}
+              </div>
+
+              {{-- Équipe à l’extérieur --}}
+              <div class="d-flex align-items-center gap-2">
+                <span class="fw-semibold text-end">{{ $match->awayTeam()?->name ?? 'Équipe inconnue' }}</span>
+                @if ($match->awayTeam()?->photo)
+                  <img class="team-logo" src="{{ asset('storage/' . $match->awayTeam()->photo) }}" alt="{{ $match->awayTeam()?->name }}">
+                @else
+                  <img class="team-logo" src="{{ asset('images/default-avatar.png') }}" alt="Photo par défaut">
+                @endif
+              </div>
+            </div>
+
+            {{-- Date + statut + lien détails --}}
+            <div class="d-flex justify-content-between align-items-center mt-2">
+              <small class="text-muted">
+                Date du match : {{ $match->date_matche }} | Statut : {{ $match->status }}
+              </small>
+              <a href="{{ route('matches.show', $match->id) }}" class="btn btn-sm btn-outline-primary">Détails</a>
+            </div>
+          </div>
         </div>
-    @endforeach
+      @endforeach
+    </div>
+  @endif
+
+</div>
 @endsection

@@ -19,7 +19,7 @@ class AuthController extends Controller
        public function login(LoginRequest $request)
 {
     if (Auth::attempt($request->only('email', 'password'))) {
-        return redirect()->route('profil')->with('success', "Connexion réussie");
+        return redirect()->route('teams.index')->with('success', "Connexion réussie");
     } else {
         // return redirect()->route('home')->with('error', "Connexion échouée")->withInput();
     }
