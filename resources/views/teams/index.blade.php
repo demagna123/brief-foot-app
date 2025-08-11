@@ -5,7 +5,7 @@
         <h1 class="fw-bold">Parcourir toutes les équipes</h1>
         <p class="text-muted">
             Parcourez la liste de toutes les équipes du championnat de<br>
-            <strong>Le nom d’un championnat fictif</strong>
+            <strong>De Adn foot</strong>
         </p>
     </div>
 
@@ -13,11 +13,11 @@
         <p class="text-center">Aucune équipe enregistrée pour le moment.</p>
     @else
         <div class="row g-4">
-            {{-- Bouton créer en bas ou en haut --}}
+           
             @auth
                 <div class="text-center mt-5">
                 <a href="{{ route('teams.create') }}" class="btn btn-success">
-                    ➕ Ajouter une nouvelle équipe
+                     Ajouter une nouvelle équipe
                 </a>
             </div>
             @endauth
@@ -25,7 +25,7 @@
             @foreach ($teams as $team)
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                     <div class="card h-100 text-center shadow-sm">
-                        {{-- Logo équipe --}}
+                        
                         @if ($team->photo)
                             <img src="{{ asset('storage/' . $team->photo) }}" alt="{{ $team->name }}"
                                 class="card-img-top p-4" style="max-height: 150px; object-fit: contain;">

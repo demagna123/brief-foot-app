@@ -27,6 +27,8 @@
 
         <dt class="col-sm-3 fw-semibold mb-1">Équipe</dt>
         <dd class="col-sm-9 mb-1">{{ $player->team?->name ?? 'Aucune équipe' }}</dd>
+
+        <p><strong>Total de buts :</strong> {{ $player->goals_count }}</p>
       </dl>
 
       {{-- ACTIONS SI CONNECTÉ --}}

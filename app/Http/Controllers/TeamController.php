@@ -14,7 +14,7 @@ class TeamController extends Controller
      */
 public function index()
 {
-    $teams = Team::withCount('players')->get(); // pour compter les joueurs
+    $teams = Team::withCount('players')->get(); 
 
     return view('teams.index', compact('teams'));
 }

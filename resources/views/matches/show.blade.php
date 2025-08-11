@@ -64,6 +64,11 @@
   {{-- Liste des buts (ta structure) --}}
   <div class="bg-white border shadow-sm tile p-3 mb-4">
     <h2 class="h5 mb-3">Buts</h2>
+    @auth
+      <div>
+      <a href="{{ route('goals.create') }}">Creer but</a>
+    </div>
+    @endauth
     @php $hasGoals = false; @endphp
     <ul class="list-group list-group-flush">
       @foreach ($matche->matcheTeams as $matcheTeam)
@@ -81,6 +86,8 @@
         @endforeach
       @endforeach
     </ul>
+
+    
     @if (!$hasGoals)
       <p class="text-muted mb-0">Aucun but pour le moment.</p>
     @endif

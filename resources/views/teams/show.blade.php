@@ -52,7 +52,8 @@
           {{-- Si tu veux garder la suppression d’équipe, laisse ce form. Sinon supprime-le. --}}
           <form action="{{ route('teams.destroy', $team) }}" method="POST"
                 onsubmit="return confirm('Supprimer cette équipe ?');">
-            @csrf @method('DELETE')
+            @csrf 
+            @method('DELETE')
             <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer l’équipe</button>
           </form>
         </div>

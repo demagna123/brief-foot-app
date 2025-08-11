@@ -6,6 +6,7 @@ use App\Http\Requests\PlayerRequest;
 use App\Models\Player;
 use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PlayerController extends Controller
 {
@@ -58,7 +59,10 @@ class PlayerController extends Controller
      */
 public function show($id)
 {
-    $player = Player::with('team')->findOrFail($id);
+    $player = Player::with('team')  // charge l'équipe
+                    ->withCount('goals') // ajoute goals_count
+                    ->findOrFail($id);
+
     return view('players.show', compact('player'));
 }
 
@@ -104,7 +108,16 @@ public function show($id)
      */
     public function destroy(String $id)
     {
-        Player::find($id)->delete();
-        return view('players.index');
+       $player = Player::findOrFail($id);
+
+    // Optionnel : supprimer la photo du stockage
+    if ($player->photo) {
+        Storage::disk('public')->delete($player->photo);
+    }
+
+    $player->delete();
+    return redirect()
+        ->route('players.index')
+        ->with('success', 'Joueur supprimé avec succès.');
     }
 }

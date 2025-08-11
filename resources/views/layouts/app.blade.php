@@ -7,7 +7,8 @@
     <title>{{ $title ?? 'FootApp' }}</title>
 
     {{-- Bootstrap CSS --}}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+    <link rel="stylesheet" href="{{ asset('bootstrap-5.3.7/dist/css/bootstrap.min.css') }}">
 </head>
 <body class="bg-white text-dark">
 
@@ -49,7 +50,7 @@
        @auth
             <li class="nav-item">
           <a class="btn btn-primary px-3" href="{{ route('logout') }}">
-            Se decoonecter
+            Se deconnecter
           </a>
         </li>
         @else
@@ -69,6 +70,7 @@
     </main>
 
     {{-- Bootstrap JS --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> --}}
+    <script src="{{ asset('bootstrap-5.3.7/dist/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

@@ -62,23 +62,31 @@ public function store(MatcheRequest $request)
 
 public function updateScore(Request $request, Matche $matche)
 {
-    $request->validate([
-        'home_score' => 'required|integer|min:0',
-        'away_score' => 'required|integer|min:0',
+    // On attend un tableau "scores[matche_team_id] => valeur"
+    $data = $request->validate([
+        'scores' => ['required','array'],
+        'scores.*' => ['required','integer','min:0'],
+        'status' => ['nullable','string'],
     ]);
 
-    // Met à jour le score des deux équipes
-    $matche->matcheTeams()->where('position', 'home')->update([
-        'score' => $request->home_score
-    ]);
+    // Sécu : on charge les relations
+    $matche->load('matcheTeams');
 
-    $matche->matcheTeams()->where('position', 'away')->update([
-        'score' => $request->away_score
-    ]);
+    foreach ($matche->matcheTeams as $mt) {
+        if (isset($data['scores'][$mt->id])) {
+            $mt->score = $data['scores'][$mt->id];
+            $mt->save();
+        }
+    }
 
-    return back()->with('success', 'Scores mis à jour avec succès.');
+    // Optionnel : mettre à jour le statut du match
+    if (isset($data['status'])) {
+        $matche->status = $data['status'];
+        $matche->save();
+    }
+
+    return back()->with('success', 'Score mis à jour.');
 }
-
     /**
      * Display the specified resource.
      */

@@ -11,12 +11,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [MainController::class, 'home']);
 
 Route::get('/teams/index', [TeamController::class, 'index'])->name('teams.index');
-Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show');
+// Route::get('/teams/show', [TeamController::class, 'show'])->name('teams.show');
 Route::middleware(AuthMiddleware::class)->group(function(){
 
 Route::get('/teams/create', [TeamController::class, 'create'])->name('teams.create');
-Route::post('/teams/create', [TeamController::class, 'store'])->name('teams.store');
-Route::get('/teams/create', [TeamController::class, 'create'])->name('teams.create');
+Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
 Route::get('/teams/edit/{id}', [TeamController::class, 'edit'])->name('teams.edit');
 Route::put('/teams/update/{id}', [TeamController::class, 'update'])->name('teams.update');
 Route::delete('/teams/destroy/{id}', [TeamController::class, 'destroy'])->name('teams.destroy');
@@ -41,8 +40,9 @@ Route::get('/goals/edit/{id}',[GoalController::class, 'edit'])->name('goals.edit
 Route::put('/goals/update/{id}',[GoalController::class, 'update'])->name('goals.update');
 Route::delete('/goals/destroy/{id}',[GoalController::class, 'destroy'])->name('goals.destroy');
 
-
 });
+
+Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show');
 Route::get('/players/show/{id}', [PlayerController::class, 'show'])->name('players.show');
 Route::get('/players/index', [PlayerController::class, 'index'])->name('players.index');
 Route::get('/matches/index',[MatcheController::class, 'index'])->name('matches.index');
@@ -52,7 +52,7 @@ Route::get('/goals/index',[GoalController::class, 'index'])->name('goals.index')
 Route::get('/users/login', [AuthController::class, 'loginform'])->name('loginform');
 Route::get('/users/login', [AuthController::class, 'loginform'])->name('loginform');
 Route::post('/users/login', [AuthController::class, 'login'])->name('login');
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/profil', [AuthController::class, 'profil'])->name('profil');
 
